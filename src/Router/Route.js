@@ -5,6 +5,7 @@ import { createBrowserRouter } from 'react-router';
 import { RouterProvider } from 'react-router-dom';
 import Student from '../Document/Students/Student';
 import Teacher from '../Document/Teacher/Teacher';
+import Profile from '../Document/Profile/Profile';
 
 const Route = () => {
     const router = createBrowserRouter([
@@ -23,6 +24,10 @@ const Route = () => {
             {
               path: "/teachers",
               element: <Teacher></Teacher>
+            },
+            {
+              path: "/profile",
+              element: <Profile></Profile>
             },
           ],
         }])    

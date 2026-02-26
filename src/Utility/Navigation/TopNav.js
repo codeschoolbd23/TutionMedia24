@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router';
 import logoMedia from '../../Utility/Other/logo192.png';
+import { to } from './../../../node_modules/@firebase/messaging/dist/esm/index.sw.esm';
 const TopNav = () => {
     const menuItems = <>
         <li>
@@ -38,10 +39,10 @@ const TopNav = () => {
               {menuItems}
             </ul>
           </div>
-          <h1 className="flex items-center text-xl">
+          <Link to="/" className="flex items-center text-xl">
             <img src={logoMedia} width={70} alt="Logo" />
             TutionMedia24
-          </h1>
+          </Link>
         </div>
         <div className="navbar-center hidden lg:flex">
           <ul className="menu menu-horizontal px-1">
@@ -49,7 +50,7 @@ const TopNav = () => {
           </ul>
         </div>
         <div className="navbar-end">
-          <Link to="/profile" className="btn">Profile</Link>
+          <Link to="/profile" className="btn btn-ghost">Profile</Link>
         </div>
       </div>
     );
