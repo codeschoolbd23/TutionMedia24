@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router';
 import logoMedia from '../../Utility/Other/logo192.png';
-import { to } from './../../../node_modules/@firebase/messaging/dist/esm/index.sw.esm';
+
 const TopNav = () => {
     const menuItems = <>
         <li>
@@ -12,7 +12,7 @@ const TopNav = () => {
             </li>
           </>
     return (
-      <div className="navbar bg-base-300 shadow-sm text-blue-700 uppercase touch-pan-up">
+      <div className="navbar bg-blue-300 shadow-sm text-blue-700 uppercase touch-pan-up">
         <div className="navbar-start">
           <div className="dropdown">
             <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
@@ -41,16 +41,16 @@ const TopNav = () => {
           </div>
           <Link to="/" className="flex items-center text-xl">
             <img src={logoMedia} width={70} alt="Logo" />
-            TutionMedia24
+            <span className="ml-2">টিউশন</span>
           </Link>
         </div>
         <div className="navbar-center hidden lg:flex">
-          <ul className="menu menu-horizontal px-1">
-          {menuItems}
-          </ul>
+          <ul className="menu menu-horizontal px-1">{menuItems}</ul>
         </div>
         <div className="navbar-end">
-          <Link to="/profile" className="btn btn-ghost">Profile</Link>
+          <Link to="/profile" className="btn btn-ghost text-xl">
+            Profile
+          </Link>
         </div>
       </div>
     );

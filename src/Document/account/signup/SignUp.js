@@ -1,39 +1,108 @@
-import React from 'react';
-import { Link } from 'react-router';
+import React, { useContext } from "react";
+import { FcGoogle } from "react-icons/fc";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import useTitle from "../../../hooks/useTitle";
+import { AuthContext } from "../../../context/Context";
 
 const SignUp = () => {
-    return (
-      <div className="hero bg-base-200 min-h-screen">
-        <div className="hero-content flex-col lg:flex-row-reverse">
-          <div className="text-center lg:text-left">
-            <h1 className="text-5xl font-bold">Login now!</h1>
-            <p className="py-6">
-              Provident cupiditate voluptatem et in. Quaerat fugiat ut assumenda
-              excepturi exercitationem quasi. In deleniti eaque aut repudiandae
-              et a id nisi.
-            </p>
-          </div>
-          <div className="card bg-base-100 w-full max-w-sm shrink-0 shadow-2xl">
-            <div className="card-body">
-              <fieldset className="fieldset">
-                <label className="label">Email</label>
-                <input type="email" className="input" placeholder="Email" />
-                <label className="label">Password</label>
-                <input
-                  type="password"
-                  className="input"
-                  placeholder="Password"
-                />
-                <div>
-                  <Link className="link link-hover">Forgot password?</Link>
-                </div>
-                <button className="btn btn-neutral mt-4">Login</button>
-              </fieldset>
+  const { createUser, googleSignIn } = useContext(AuthContext);
+  useTitle("Sign Up");
+  const navigate = useNavigate();
+  const location = useLocation();
+  const from = location.from?.state?.pathname || "/";
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    const form = event.target;
+    const displayName = form.name.value;
+    const email = form.email.value;
+    const password = form.password.value;
+    createUser(email, password, displayName)
+      .then((result) => {
+        const user = result.user;
+        console.log(user, "signup");
+        form.reset();
+        alert("successfully sign up");
+        navigate(from, { replace: true });
+      })
+      .catch((error) => console.error(error));
+  };
+  const googleHandle = () => {
+    googleSignIn()
+      .then((result) => {
+        const user = result.user;
+        navigate(from, { replace: true });
+        console.log(user);
+      })
+      .catch((err) => console.error(err));
+  };
+  return (
+    <>
+      <div className="w-full flex flex-col items-center place-items-center p-4 mb-2 lg:px-8 lg:pt-6 lg:pb-8 lg:mb-4">
+        <div className="w-full border py-5 px-5 lg:px-10 lg:w-1/2 mx-auto rounded-lg">
+          <h2 className="text-center w-full">Register form</h2>
+          <form onSubmit={handleSubmit}>
+            <div className="mb-4">
+           
+              <input
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-300 leading-tight focus:outline-none focus:shadow-outline"
+                id="name"
+                type="text"
+                name="name"
+                placeholder="enter name"
+              />
             </div>
-          </div>
+            <div className="mb-4">
+            
+              <input
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-300 leading-tight focus:outline-none focus:shadow-outline"
+                id="email"
+                type="email"
+                name="email"
+                placeholder="email"
+              />
+            </div>
+            <div className="mb-6">
+             
+              <input
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-300 leading-tight focus:outline-none focus:shadow-outline"
+                id="password"
+                type="password"
+                placeholder="password......"
+                name="password"
+              />
+            </div>
+            <div className="flex flex-col items-center justify-between">
+              <button className="btn w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                Sign Up
+              </button>
+              <Link
+                to="/login"
+                className="inline-block align-baseline text-gray-600 text-sm"
+              >
+                already have an account?
+                <span className="text-xs text-blue-700 underline font-bold">
+                  log in
+                </span>
+              </Link>
+            </div>
+          </form>
+
+          <hr className="bg-gray-400 mt-5" />
+          <p className="w-full text-center text-xs">OR</p>
+          <hr className="bg-gray-400 mb-5" />
+          <button
+            onClick={googleHandle}
+            className="w-full flex flex-col place-items-center btn btn-outline  my-2 bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 border border-blue-500 hover:border-transparent rounded"
+          >
+            <p className="flex">
+              <FcGoogle className="px-1 text-2xl"></FcGoogle>Register with
+              <span className="text-orange-500 px-1">google</span>
+            </p>
+          </button>
         </div>
       </div>
-    );
+    </>
+  );
 };
 
 export default SignUp;

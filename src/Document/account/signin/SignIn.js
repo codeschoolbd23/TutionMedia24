@@ -1,33 +1,105 @@
-import { Link } from "react-router";
+import React, { useContext, useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { FcGoogle } from "react-icons/fc";
+import useTitle from "../../../hooks/useTitle";
+import { AuthContext } from "../../../context/Context";
+
 
 const SignIn = () => {
+  useTitle("Login");
+  const { logIn, googleSignIn } = useContext(AuthContext);
+  const [error, setError] = useState("");
+  const navigate = useNavigate();
+  const location = useLocation();
+  const from = location.from?.state?.pathname || "/";
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    const form = event.target;
+    const password = form.password.value;
+    const email = form.email.value;
+
+    logIn(email, password)
+      .then((result) => {
+        const user = result.user;
+        setError("");
+        form.reset();
+        console.log(user);
+        navigate(from, { replace: true });
+        return alert("Successfully log in!!!");
+      })
+      .catch((err) => {
+        setError("User or Password is invalid!!!");
+        console.error(err);
+      });
+  };
+  const googleHandle = () => {
+    googleSignIn()
+      .then((result) => {
+        const user = result.user;
+        navigate(from, { replace: true });
+        console.log(user);
+      })
+      .catch((err) => console.error(err));
+  };
   return (
-    <div className="hero bg-base-200 min-h-screen">
-      <div className="hero-content flex-col lg:flex-row-reverse">
-        <div className="text-center lg:text-left">
-          <h1 className="text-5xl font-bold">Login now!</h1>
-          <p className="py-6">
-            Provident cupiditate voluptatem et in. Quaerat fugiat ut assumenda
-            excepturi exercitationem quasi. In deleniti eaque aut repudiandae et
-            a id nisi.
-          </p>
-        </div>
-        <div className="card bg-base-100 w-full max-w-sm shrink-0 shadow-2xl">
-          <div className="card-body">
-            <fieldset className="fieldset">
-              <label className="label">Email</label>
-              <input type="email" className="input" placeholder="Email" />
-              <label className="label">Password</label>
-              <input type="password" className="input" placeholder="Password" />
-              <div>
-                <Link className="link link-hover">Forgot password?</Link>
-              </div>
-              <button className="btn btn-neutral mt-4">Login</button>
-            </fieldset>
-          </div>
+    <>
+      <div className="w-full flex flex-col justify-center items-center place-items-center  p-4  lg:px-8 lg:pt-6 lg:pb-8">
+        <div className="w-full border py-5 px-5 lg:px-10 lg:w-2/5 mx-auto rounded-lg">
+          <form onSubmit={handleSubmit}>
+            <div className="mb-4">
+              <input
+                className="rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
+                type="email"
+                name="email"
+                placeholder="email"
+              />
+            </div>
+            <div className="mb-6">
+              <input
+                className="rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
+                type="password"
+                placeholder="Enter your password"
+                name="password"
+              />
+              <p className="text-red-500 text-xs italic">{error}</p>
+            </div>
+            <div className="flex flex-col items-center justify-between">
+              <button className="btn w-full bg-blue-400 hover:bg-blue-700 text-white font-bold py-1 px-4 rounded focus:outline-none focus:shadow-outline">
+                Login
+              </button>
+              <Link
+                to="/signup"
+                className="inline-block align-baseline text-gray-600 text-sm"
+              >
+                Don't have an account?
+                <span className="text-xs text-blue-700 underline font-bold">
+                  Register
+                </span>
+              </Link>
+            </div>
+            <Link
+              className="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800"
+              to="/"
+            >
+              Forgot Password?
+            </Link>
+          </form>
+
+          <hr className="bg-gray-400 mt-5" />
+          <p className="w-full text-center text-xs">OR</p>
+          <hr className="bg-gray-400 mb-5" />
+          <button
+            onClick={googleHandle}
+            className="w-full flex flex-col place-items-center btn btn-outline  my-2  lowercase  bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 border border-blue-500 hover:border-transparent rounded"
+          >
+            <p className="flex">
+              <FcGoogle className="px-1 text-2xl"></FcGoogle>Sign in with
+              <span className="text-orange-500 px-1">google</span>
+            </p>
+          </button>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 
